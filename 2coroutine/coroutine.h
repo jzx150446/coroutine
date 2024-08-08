@@ -20,7 +20,7 @@ public:
         TERM,
     };
 private:
-    Fiber();
+    Fiber();// 仅由GetThis()调用 -> 私有 -> 创建主协程
 public:
     Fiber(std::function<void()>cb,size_t stacksize = 0, bool run_in_scheduler = true);
 
