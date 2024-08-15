@@ -1,7 +1,8 @@
 #include "coroutine.h"
 #include <vector>
-#include <functional>
 
+
+using namespace sylar;
 class scheduler{
 public:
     void schedule(std::shared_ptr<Fiber>task){
@@ -36,7 +37,7 @@ int main()
 
     for(auto i = 0; i<20;++i)
     {
-        std::shared_ptr<Fiber>fiber = std::make_shared<Fiber>(std::bind(test_,i));
+        std::shared_ptr<Fiber>fiber = std::make_shared<Fiber>(std::bind(test_,i),0,false);
         sc.schedule(fiber);
     }
     sc.run();

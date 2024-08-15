@@ -8,7 +8,10 @@
 #include<atomic>
 #include<functional>
 #include<cassert>
+#include<unistd.h>
+#include<mutex>
 
+namespace sylar{
 
 class Fiber:public std::enable_shared_from_this<Fiber>
 {
@@ -38,14 +41,17 @@ public:
     State getState() const{return m_state;}
 
 public:
+    //设置当前运行的协程
     static void SetThis(Fiber *f);
-
+    //得到当前运行的协程
     static std::shared_ptr<Fiber>GetThis();
 
     static uint64_t TotalFibers();
-
+    //设置调度协程（默认为主协程）
+    static void SetSchedulerFiber(Fiber *f);
+    //协程函数
     static void MainFunc();
-
+    //得到当前运行的协程的id
     static uint64_t GetFiberId();
 
 private:
@@ -58,8 +64,11 @@ private:
     void *m_stack = nullptr;
     std::function<void()>m_cb;
 
-    bool in_run_scheduler;
+    bool m_in_run_scheduler;
+public:
+    std::mutex mtx;
 };
 
+}
 
 #endif
